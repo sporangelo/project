@@ -1,0 +1,21 @@
+/var/log/apache2/*.log {
+    daily
+    missingok
+    rotate <%= @logrotate_nr_of_days %>
+    compress
+    delaycompress
+    notifempty
+    create 0644 www-data adm
+    sharedscripts
+    <%= @logrotate_size %>
+    postrotate
+        if /etc/init.d/apache2 status > /dev/null ; then \
+            /etc/init.d/apache2 reload > /dev/null; \
+        fi;
+    endscript
+    prerotate
+        if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+            run-parts /etc/logrotate.d/httpd-prerotate; \
+        fi; \
+    endscript
+}

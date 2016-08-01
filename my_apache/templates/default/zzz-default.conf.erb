@@ -1,0 +1,24 @@
+DocumentRoot /home/<%= node[:pbs_environment][:username] %>/webroot
+LogFormat "%h %t process_time=%D request=\"%r\" response=%>s bytes=%b referrer=\"%{Referer}i\" user_agent=\"%{User-Agent}i\" appsvrname=\"%{X-PBS-appsvrname}o\" appsvrip=\"%{X-PBS-appsvrip}o\" host=%V xff=\"%{X-Forwarded-For}i\" session_id=%{www.apache.sid}C api_key=%{X-PBSAuth-Consumer-Key}i" combined
+
+# apache 2.2
+#"host:fwcacheproxy,timestamp:%{%s}t,websrv:httpd,httphost:%V,client_ip_address:%a,process_time:%D,request:%r,response:%>s,bytes:%b,referrer:%{Referer}i,user_agent:%{User-Agent}i,appsvrname:%{X-PBS-fwsrvname}o,appsvrip:%{X-PBS-fwsrvip}o,xff:%{X-Forwarded-For}i,session_id:%{www.apache.sid}C"
+
+# apache 2.4
+#"host:fwcacheproxy,timestamp:%{sec}t,websrv:httpd,httphost:%V,client_ip_address:%a,process_time:%D,request:%r,response:%>s,bytes:%b,referrer:%{Referer}i,user_agent:%{User-Agent}i,appsvrname:%{X-PBS-fwsrvname}o,appsvrip:%{X-PBS-fwsrvip}o,xff:%{X-Forwarded-For}i,session_id:%{www.apache.sid}C"
+
+CustomLog /var/log/apache2/<%= node[:pbs_environment][:username] %>_access.log combined
+ErrorLog /var/log/apache2/<%= node[:pbs_environment][:username] %>_error.log
+
+<Directory "/home/<%= node[:pbs_environment][:username] %>/webroot">
+  Options FollowSymLinks
+  AllowOverride All
+  Order allow,deny
+  Allow from all
+</Directory>
+
+# Custom PBS header
+Header set <%= @x_pbs_svrname %> "<%= node[:opsworks][:instance][:hostname] %>"
+Header set <%= @x_pbs_svrip %> "<%= node[:opsworks][:instance][:private_ip] %>"
+
+IncludeOptional /home/<%= node[:pbs_environment][:username] %>/apache2/conf.d/*.conf
