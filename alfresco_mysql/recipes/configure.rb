@@ -3,29 +3,29 @@
 
 include_recipe 'alfresco_mysql::service'
 
-pbs_env = nil
+alfresco_env = nil
 user = nil
 pass = nil
 
-if node.has_key?('pbs_environment')
-  pbs_env = node['pbs_environment']
+if node.has_key?('alfresco_environment')
+  alfresco_env = node['alfresco_environment']
 else
-  Chef::Log.fatal('alfresco_mysql::configure: ERROR: no pbs_environment defined')
+  Chef::Log.fatal('alfresco_mysql::configure: ERROR: no alfresco_environment defined')
   raise
 end
 
-if pbs_env.has_key?('username')
-  user = node['pbs_environment']['username']
-  pass = node['pbs_environment']['password']
+if alfresco_env.has_key?('username')
+  user = node['alfresco_environment']['username']
+  pass = node['alfresco_environment']['password']
 else
   Chef::Log.fatal('alfresco_mysql::configure: ERROR: no username defined')
   raise
 end
 
 Chef::Log.info('---- step 1 -----')
-if pbs_env.has_key?('dbschema')
+if alfresco_env.has_key?('dbschema')
 	# take the database info from the json
-	databases = pbs_env[:dbschema]
+	databases = alfresco_env[:dbschema]
 else
 	databases = nil
 end
@@ -45,8 +45,8 @@ if node.has_key?(layer)
 	end
 end
 
-if pbs_env.has_key?('mysql_root')
-	mysql_root = pbs_env[:mysql_root]
+if alfresco_env.has_key?('mysql_root')
+	mysql_root = alfresco_env[:mysql_root]
 else
 	mysql_root = nil
 end

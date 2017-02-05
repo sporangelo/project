@@ -1,4 +1,4 @@
-[client]
+:%s/033621873299/802077158405/gc[client]
 port				= 3306
 socket				= /var/run/mysqld/mysqld.sock
 
@@ -80,4 +80,4 @@ write_buffer			= 2M
 [mysqlhotcopy]
 interactive-timeout
 
-!include /home/<%= node[:pbs_environment][:username] %>/etc/mysqld/my-override.cnf
+!include /home/<%= node[:alfresco_environment][:username] %>/etc/mysqld/my-override.cnf
